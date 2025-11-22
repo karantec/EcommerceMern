@@ -1,6 +1,4 @@
-// export const BASE_URL =
-// process.env.NODE_ENV === 'development' ? 'http://localhost:5000' : '';
-export const BASE_URL = "";
+export const BASE_URL = "https://ecommercemern-ynop.onrender.com";
 export const CATEGORY_URL = "/api/v1/category";
 export const PRODUCTS_URL = "/api/v1/products";
 export const UPLOAD_URL = "/api/v1/upload";
