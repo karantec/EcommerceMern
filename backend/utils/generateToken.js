@@ -1,21 +1,19 @@
-// utils/generateToken.js
 import jwt from "jsonwebtoken";
 
-export const generateToken = (req, res, userId) => {
-  // create token
+const generateToken = (res, userId) => {
   const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
-    expiresIn: req.body?.remember ? `${365 * 24}h` : "24h",
+    expiresIn: "30d",
   });
 
-  // set cookie: secure should be true only in production
+  // Set JWT as HTTP-Only cookie
   res.cookie("jwt", token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production", // <--- only true in production
-    sameSite: "lax", // 'lax' is safer for local testing; use 'none' + secure:true for cross-site + HTTPS
-    maxAge: req.body?.remember
-      ? 365 * 24 * 60 * 60 * 1000
-      : 24 * 60 * 60 * 1000,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
   });
 
-  return token; // return so controllers can also send token in JSON for Postman
+  return token;
 };
+
+export { generateToken };

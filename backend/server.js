@@ -23,7 +23,15 @@ connectDB();
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "https://ecommerce-mern-psi-five.vercel.app",
+      "http://localhost:3000",
+    ],
+    credentials: true,
+  })
+);
 app.use(compression());
 app.use(cookieParser());
 app.use(express.json());

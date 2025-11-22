@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { generateToken } from "../utils/generateToken.js";
 import transporter from "../config/email.js";
+
 // @desc     Auth user & get token
 // @method   POST
 // @endpoint /api/users/login
@@ -29,12 +30,12 @@ const loginUser = async (req, res, next) => {
       );
     }
 
-    // generateToken should set the httpOnly cookie and RETURN the token string
-    const token = generateToken(req, res, user._id);
+    // generateToken sets the httpOnly cookie and returns the token
+    const token = generateToken(res, user._id);
 
     res.status(200).json({
       message: "Login successful.",
-      token, // convenient for Postman / debugging
+      token,
       userId: user._id,
       name: user.name,
       email: user.email,
@@ -70,10 +71,11 @@ const registerUser = async (req, res, next) => {
 
     await user.save();
 
-    generateToken(req, res, user._id);
+    const token = generateToken(res, user._id);
 
     res.status(201).json({
       message: "Registration successful. Welcome!",
+      token,
       userId: user._id,
       name: user.name,
       email: user.email,
@@ -89,7 +91,12 @@ const registerUser = async (req, res, next) => {
 // @endpoint /api/users/logout
 // @access   Private
 const logoutUser = (req, res) => {
-  res.clearCookie("jwt", { httpOnly: true });
+  // Clear cookie with same settings used when setting it
+  res.clearCookie("jwt", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+  });
 
   res.status(200).json({ message: "Logout successful" });
 };
@@ -154,6 +161,7 @@ const getUsers = async (req, res, next) => {
     next(error);
   }
 };
+
 // @desc     Get user
 // @method   GET
 // @endpoint /api/users/:id
@@ -274,22 +282,21 @@ const resetPasswordRequest = async (req, res, next) => {
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
       expiresIn: "15m",
     });
-    const passwordResetLink = `https://mern-shop-abxs.onrender.com/reset-password/${user._id}/${token}`;
+
+    // Updated to use frontend URL
+    const passwordResetLink = `${process.env.FRONTEND_URL}/reset-password/${user._id}/${token}`;
     console.log(passwordResetLink);
+
     await transporter.sendMail({
-      from: `"MERN Shop" ${process.env.EMAIL_FROM}`, // sender address
-      to: user.email, // list of receivers
-      subject: "Password Reset", // Subject line
+      from: `"MERN Shop" ${process.env.EMAIL_FROM}`,
+      to: user.email,
+      subject: "Password Reset",
       html: `<p>Hi ${user.name},</p>
-
             <p>We received a password reset request for your account. Click the link below to set a new password:</p>
-
             <p><a href=${passwordResetLink} target="_blank">${passwordResetLink}</a></p>
-
             <p>If you didn't request this, you can ignore this email.</p>
-
             <p>Thanks,<br>
-            MERN Shop Team</p>`, // html body
+            MERN Shop Team</p>`,
     });
 
     res
