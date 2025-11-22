@@ -12,11 +12,11 @@ const Meta = ({ title, description, keywords }) => {
 };
 
 Meta.defaultProps = {
-  title: 'MERN Shop | Buy Electronics Online',
+  title: 'Ecoland | Premium Organic Products Online',
   description:
-    'Browse and buy the latest electronic gadgets and devices on our online store. Find great deals on smartphones, laptops, and more. Fast shipping and secure payments.',
+    'Join the organic movement with Ecoland. Shop certified organic spices, cashews, turmeric, and more. 100% guaranteed quality, free shipping above ₹500, and easy returns. Best quality organic products at lowest prices.',
   keywords:
-    'electronics, gadgets, smartphones, laptops, online shopping, tech accessories'
+    'organic products, organic spices, organic cashews, organic turmeric, organic black pepper, certified organic, natural products, healthy food, ecoland, organic shopping, chemical-free products, premium organic'
 };
 
 export default Meta;

@@ -1,14 +1,14 @@
 import React from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+
 const FormContainer = ({ children }) => {
   return (
-    <Container>
-      <Row className='justify-content-md-center'>
-        <Col xs={12} md={8} lg={6}>
+    <div className="container mx-auto px-4">
+      <div className="flex justify-center">
+        <div className="w-full md:w-2/3 lg:w-1/2">
           {children}
-        </Col>
-      </Row>
-    </Container>
+        </div>
+      </div>
+    </div>
   );
 };
 

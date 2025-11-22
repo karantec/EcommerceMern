@@ -28,6 +28,10 @@ import AdminProfilePage from '../pages/admin/AdminProfilePage';
 import AdminListPage from '../pages/admin/AdminListPage';
 import ResetPasswordRequestPage from '../pages/ResetPasswordRequestPage';
 import ResetPasswordPage from '../pages/ResetPasswordPage';
+import ContactUs from '../pages/Contact';
+import AboutUs from '../components/About';
+
+import CategoryListPage from '../pages/admin/CategoryListPage';
 
 const router = createBrowserRouter([
   {
@@ -54,6 +58,14 @@ const router = createBrowserRouter([
       {
         path: '/reset-password/:id/:token',
         element: <ResetPasswordPage />
+      },
+       {
+        path: '/about',
+        element: <AboutUs />
+      },
+      {
+        path: '/contact',
+        element: <ContactUs />
       },
       {
         path: '/login',
@@ -110,6 +122,10 @@ const router = createBrowserRouter([
           {
             path: '/admin/order-list',
             element: <OrderListPage />
+          },
+           {
+            path: '/admin/category-list',
+            element: <CategoryListPage />
           },
           {
             path: '/admin/product-list',
